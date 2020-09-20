@@ -1,9 +1,29 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { ActionTypes, DispatchTypes } from './redux/Actions';
+import { State } from './redux/State';
 
-function App() {
+const mapStateToProps = (state: State) => ({
+  message: state.message
+});
+
+const mapDispatchToProps = (dispatch: DispatchTypes) => ({
+  setMessage: (value: string) => dispatch({type: ActionTypes.SetMessage, payload: value})
+});
+
+type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
+
+const App = ({ message, setMessage }: Props) => {
+
+  React.useEffect(()=> {
+    setTimeout(() => {
+      setMessage('2 seconds have passed');
+    }, 2*1000);
+  },[]);
+
   return (
-    <div>Start creating something amazing!</div>
-  );
+    <p>{message}</p>
+  )
 }
 
-export default App;
+export default connect(mapStateToProps, mapDispatchToProps)(App);
